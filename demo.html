@@ -3,33 +3,65 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Acme Co — (a fake customer website)</title>
+<title>Acme Co — Live Demo (Feedbackly)</title>
 <style>
-  body{margin:0;font:16px/1.6 system-ui,sans-serif;color:#222}
-  .hero{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;padding:80px 24px;text-align:center}
-  .hero h1{font-size:40px;margin:0 0 12px}
-  .hero p{opacity:.85;max-width:520px;margin:0 auto}
-  .body{max-width:640px;margin:40px auto;padding:0 20px}
-  .note{background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;padding:16px;font-size:14px;color:#3730a3}
+  :root{--indigo:#4f46e5;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);line-height:1.6}
+
+  .demobar{background:#0f172a;color:#fff;text-align:center;padding:10px;font-size:14px}
+  .demobar a{color:#a5b4fc;font-weight:600}
+
+  .hero{background:linear-gradient(135deg,#312e81,#4f46e5);color:#fff;padding:90px 24px;text-align:center}
+  .hero h1{font-size:46px;letter-spacing:-1px;margin-bottom:14px}
+  .hero p{opacity:.9;max-width:520px;margin:0 auto;font-size:18px}
+
+  .wrap{max-width:680px;margin:50px auto;padding:0 24px}
+  h2{font-size:26px;margin-bottom:14px;letter-spacing:-.5px}
+  p.body{color:var(--muted);margin-bottom:24px;font-size:16px}
+
+  .callout{background:#eef2ff;border:1px solid #c7d2fe;border-radius:14px;padding:22px 24px;color:#3730a3;font-size:15px}
+  .callout b{color:#312e81}
+  .callout .arrow{font-size:18px}
+
+  .codeblock{background:#0f172a;color:#e2e8f0;padding:18px 20px;border-radius:12px;overflow:auto;font-size:14px;margin-top:26px;font-family:'SF Mono',Consolas,monospace}
+  .codeblock .c1{color:#94a3b8}.codeblock .c2{color:#7dd3fc}.codeblock .c3{color:#fcd34d}
+
+  .links{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+  .links a{padding:11px 18px;border-radius:10px;font-weight:600;font-size:15px;text-decoration:none}
+  .links .p{background:var(--indigo);color:#fff}
+  .links .g{border:1px solid var(--line);color:var(--ink)}
 </style>
 </head>
 <body>
+  <div class="demobar">🔎 This is a <b>demo site</b> showing how Feedbackly looks on a real customer's website · <a href="/">Back to Feedbackly</a></div>
+
   <div class="hero">
     <h1>Acme Co.</h1>
-    <p>This is a pretend customer website. Imagine this belongs to someone who paid you $5/month.</p>
-  </div>
-  <div class="body">
-    <h2>Welcome to our product</h2>
-    <p>Lorem ipsum dolor sit amet. This page exists only to show how the Feedbackly widget appears on a real website.</p>
-    <div class="note">
-      👉 Look at the <b>bottom-right corner</b>. Click the <b>💬 Feedback</b> button, type a message, and send it.
-      Then open the <a href="/">Dashboard</a> to watch it appear live.
-    </div>
-    <p>The customer added just ONE line of code to get this:</p>
-    <pre style="background:#0f172a;color:#e2e8f0;padding:14px;border-radius:8px;overflow:auto;font-size:13px">&lt;script src="/widget.js" data-project="demo"&gt;&lt;/script&gt;</pre>
+    <p>A pretend customer website. Imagine this belongs to someone who installed Feedbackly.</p>
   </div>
 
-  <!-- This is the one line a customer pastes into their site -->
+  <div class="wrap">
+    <h2>👋 Try it yourself</h2>
+    <p class="body">This page has the Feedbackly widget installed. Go ahead and leave a message — then open the dashboard to watch it appear live.</p>
+
+    <div class="callout">
+      <span class="arrow">👉</span> Look at the <b>bottom-right corner</b>. Click the <b>💬 Feedback</b> button, type something, and hit Send.
+      Then open the <a href="/dashboard"><b>Dashboard →</b></a> to see it arrive in real time.
+    </div>
+
+    <h2 style="margin-top:40px">One line of code</h2>
+    <p class="body">That floating button? The site owner added just this single line:</p>
+    <div class="codeblock"><span class="c1">&lt;!-- Add before &lt;/body&gt; --&gt;</span>
+&lt;<span class="c2">script</span> <span class="c3">src</span>=<span class="c1">"/widget.js"</span> <span class="c3">data-project</span>=<span class="c1">"demo"</span>&gt;&lt;/<span class="c2">script</span>&gt;</div>
+
+    <div class="links">
+      <a class="p" href="/dashboard">📊 Open the dashboard</a>
+      <a class="g" href="/">← Back to Feedbackly home</a>
+    </div>
+  </div>
+
+  <!-- The one line a customer pastes into their site -->
   <script src="/widget.js" data-project="demo"></script>
 </body>
 </html>

@@ -96,8 +96,8 @@ const server = http.createServer((req, res) => {
   if (route === "/widget.js") return sendFile(res, "widget.js", "application/javascript");
 
   // 4) Pages
-  if (route === "/" || route === "/dashboard")
-    return sendFile(res, "dashboard.html", "text/html");
+  if (route === "/") return sendFile(res, "landing.html", "text/html");
+  if (route === "/dashboard") return sendFile(res, "dashboard.html", "text/html");
   if (route === "/demo") return sendFile(res, "demo.html", "text/html");
 
   send(res, 404, "Not found");
@@ -105,6 +105,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`\n  Feedbackly running:`);
-  console.log(`  Dashboard : http://localhost:${PORT}/`);
+  console.log(`  Landing   : http://localhost:${PORT}/`);
+  console.log(`  Dashboard : http://localhost:${PORT}/dashboard`);
   console.log(`  Demo site : http://localhost:${PORT}/demo\n`);
 });

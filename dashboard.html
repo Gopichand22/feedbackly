@@ -5,50 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Feedbackly — Dashboard</title>
 <style>
-  :root{--indigo:#4f46e5;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--soft:#f8fafc;--bg:#fff}
+  :root{
+    --bg:#070b1a; --bg2:#0b1230; --glass:rgba(255,255,255,.06); --glass-bd:rgba(255,255,255,.12);
+    --ink:#e8ecff; --muted:#8b95c9; --indigo:#6366f1; --violet:#8b5cf6; --line:rgba(255,255,255,.08);
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--soft);color:var(--ink)}
+  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
 
-  .topbar{background:var(--bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-  .topbar .inner{max-width:920px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-  .logo{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
-  .logo .dot{width:26px;height:26px;background:var(--indigo);border-radius:7px;display:grid;place-items:center;color:#fff;font-size:15px}
-  .topbar a.home{color:var(--muted);font-size:14px;font-weight:500}
-  .topbar a.home:hover{color:var(--ink)}
+  /* animated aurora background */
+  .aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(900px 600px at 10% -10%,#1e1b4b,transparent),radial-gradient(800px 500px at 100% 0%,#0e1a4d,transparent),var(--bg)}
+  .aurora::before,.aurora::after{content:"";position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(110px);opacity:.5}
+  .aurora::before{background:#6366f1;top:-150px;left:-100px;animation:float1 14s ease-in-out infinite}
+  .aurora::after{background:#8b5cf6;bottom:-200px;right:-100px;animation:float2 18s ease-in-out infinite}
+  @keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(120px,80px)}}
+  @keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-120px,-60px)}}
 
-  .wrap{max-width:920px;margin:26px auto;padding:0 20px}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(7,11,26,.6);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .topbar .inner{max-width:1080px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px}
+  .logo .dot{width:30px;height:30px;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:9px;display:grid;place-items:center;font-size:16px;box-shadow:0 6px 20px rgba(99,102,241,.5)}
+  .topbar a.home{color:var(--muted);font-size:14px}.topbar a.home:hover{color:var(--ink)}
 
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
-  @media(max-width:640px){.stats{grid-template-columns:1fr}}
-  .stat{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
-  .stat .label{color:var(--muted);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
-  .stat .value{font-size:30px;font-weight:800;margin-top:6px}
+  .wrap{max-width:1080px;margin:28px auto;padding:0 22px}
 
-  .controls{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
-  .controls label{font-size:13px;color:var(--muted);font-weight:600}
-  .controls input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;min-width:180px;outline:none}
-  .controls input:focus{border-color:var(--indigo)}
-  .controls .btn{padding:10px 16px;background:var(--indigo);color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px}
-  .controls .spacer{flex:1}
-  .live{font-size:12px;color:#16a34a;font-weight:600;display:flex;align-items:center;gap:6px}
-  .live .pulse{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:p 1.4s infinite}
-  @keyframes p{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--glass);border:1px solid var(--glass-bd);border-radius:18px;padding:18px 20px;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+  .stat .label{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .stat .value{font-size:32px;font-weight:800;margin-top:8px;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .ico{position:absolute;top:14px;right:16px;font-size:22px;opacity:.6}
 
-  .card{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;transition:.15s}
-  .card:hover{box-shadow:0 6px 18px rgba(15,23,42,.06)}
-  .card .msg{font-size:15px;line-height:1.55;margin-bottom:10px;white-space:pre-wrap}
-  .card .meta{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-  .card .meta .url{color:var(--indigo);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .avatar{width:30px;height:30px;border-radius:50%;background:#eef2ff;color:var(--indigo);font-weight:700;display:inline-grid;place-items:center;font-size:13px;margin-right:6px}
-  .row{display:flex;gap:10px;align-items:flex-start}
-  .row .body{flex:1}
+  .panel{background:var(--glass);border:1px solid var(--glass-bd);border-radius:20px;padding:18px;backdrop-filter:blur(12px)}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .toolbar input[type=text]{flex:1;min-width:160px;background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:14px;outline:none}
+  .toolbar input::placeholder{color:var(--muted)}
+  .toolbar input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+  .seg{display:flex;background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);border-radius:12px;overflow:hidden}
+  .seg button{background:transparent;border:none;color:var(--muted);padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+  .seg button.on{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff}
+  .btn{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;font-size:13px}
+  .btn.ghost{background:rgba(255,255,255,.06);border:1px solid var(--glass-bd)}
+  .live{font-size:12px;color:#34d399;font-weight:600;display:flex;align-items:center;gap:6px;margin-left:auto}
+  .live .pulse{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399;animation:p 1.4s infinite}
+  @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 
-  .empty{text-align:center;color:var(--muted);padding:60px 20px;background:var(--bg);border:1px dashed var(--line);border-radius:14px}
-  .empty .big{font-size:40px;margin-bottom:10px}
+  .card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;transition:.15s;display:flex;gap:14px;align-items:flex-start}
+  .card:hover{border-color:var(--glass-bd);transform:translateX(2px)}
+  .vote{display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);border-radius:12px;padding:8px 12px;cursor:pointer;min-width:52px;transition:.15s}
+  .vote:hover{border-color:var(--indigo);background:rgba(99,102,241,.15)}
+  .vote .up{font-size:14px}.vote .n{font-weight:800;font-size:16px}
+  .body{flex:1;min-width:0}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+  .chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
+  .chip.idea{background:rgba(99,102,241,.2);color:#a5b4fc}
+  .chip.bug{background:rgba(239,68,68,.2);color:#fca5a5}
+  .chip.praise{background:rgba(236,72,153,.2);color:#f9a8d4}
+  .chip.other{background:rgba(148,163,184,.2);color:#cbd5e1}
+  .chip.mood{background:rgba(52,211,153,.15);color:#6ee7b7}
+  .msg{font-size:15px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+  .meta{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  .meta .url{color:#a5b4fc;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .status{background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);color:var(--ink);border-radius:8px;padding:4px 8px;font-size:12px;cursor:pointer;outline:none}
+  .del{background:transparent;border:none;color:#fca5a5;cursor:pointer;font-size:13px;opacity:.6}.del:hover{opacity:1}
+
+  .empty{text-align:center;color:var(--muted);padding:70px 20px}.empty .big{font-size:46px;margin-bottom:12px}
 </style>
 </head>
 <body>
+<div class="aurora"></div>
 
 <div class="topbar">
   <div class="inner">
@@ -59,54 +84,86 @@
 
 <div class="wrap">
   <div class="stats">
-    <div class="stat"><div class="label">Total feedback</div><div class="value" id="s-total">—</div></div>
-    <div class="stat"><div class="label">Last 24 hours</div><div class="value" id="s-today">—</div></div>
-    <div class="stat"><div class="label">Project</div><div class="value" id="s-project" style="font-size:20px;padding-top:8px">demo</div></div>
+    <div class="stat"><div class="ico">📨</div><div class="label">Total</div><div class="value" id="s-total">—</div></div>
+    <div class="stat"><div class="ico">⏱️</div><div class="label">Last 24h</div><div class="value" id="s-today">—</div></div>
+    <div class="stat"><div class="ico">😊</div><div class="label">Avg mood</div><div class="value" id="s-mood">—</div></div>
+    <div class="stat"><div class="ico">🔥</div><div class="label">Top votes</div><div class="value" id="s-votes">—</div></div>
   </div>
 
-  <div class="controls">
-    <label>Project ID</label>
-    <input id="project" value="demo" placeholder="your-project-id" />
-    <button class="btn" onclick="load()">Refresh</button>
-    <div class="spacer"></div>
-    <div class="live"><span class="pulse"></span> Live · auto-updating</div>
+  <div class="panel">
+    <div class="toolbar">
+      <input type="text" id="project" value="demo" placeholder="project id" style="max-width:140px;flex:none" />
+      <input type="text" id="search" placeholder="🔍 Search feedback…" />
+      <div class="seg" id="filter">
+        <button class="on" data-f="all">All</button>
+        <button data-f="idea">💡 Ideas</button>
+        <button data-f="bug">🐞 Bugs</button>
+        <button data-f="praise">❤️ Love</button>
+      </div>
+      <button class="btn ghost" onclick="exportCsv()">⬇ Export CSV</button>
+      <div class="live"><span class="pulse"></span> Live</div>
+    </div>
+    <div id="list"><div class="empty"><div class="big">⏳</div>Loading…</div></div>
   </div>
-
-  <div id="list"><div class="empty"><div class="big">⏳</div>Loading…</div></div>
 </div>
 
 <script>
+  var FILTER="all", SEARCH="", CACHE=[];
   function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function timeAgo(iso){
-    const s=Math.floor((Date.now()-new Date(iso))/1000);
-    if(s<60)return 'just now';
-    if(s<3600)return Math.floor(s/60)+'m ago';
-    if(s<86400)return Math.floor(s/3600)+'h ago';
-    return Math.floor(s/86400)+'d ago';
-  }
+  function timeAgo(iso){var s=Math.floor((Date.now()-new Date(iso))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
+  var MOODEMO={1:'😡',2:'🙁',3:'😐',4:'🙂',5:'😍'};
+
+  function proj(){return document.getElementById('project').value||'demo';}
+
   async function load(){
-    const project=document.getElementById('project').value||'demo';
-    document.getElementById('s-project').textContent=project;
     let items=[];
-    try{ items=await (await fetch('/api/feedback?project='+encodeURIComponent(project))).json(); }catch(e){}
-    const dayAgo=Date.now()-86400000;
+    try{items=await (await fetch('/api/feedback?project='+encodeURIComponent(proj()))).json();}catch(e){}
+    CACHE=items;
+    var dayAgo=Date.now()-86400000;
+    var moods=items.filter(f=>f.mood).map(f=>f.mood);
     document.getElementById('s-total').textContent=items.length;
     document.getElementById('s-today').textContent=items.filter(f=>new Date(f.createdAt)>=dayAgo).length;
-    const list=document.getElementById('list');
-    if(!items.length){
-      list.innerHTML='<div class="empty"><div class="big">📭</div>No feedback yet.<br>Open the <a href="/demo" style="color:#4f46e5">demo page</a> and send one to see it appear here.</div>';
-      return;
-    }
-    list.innerHTML=items.map(f=>{
-      const url=f.pageUrl?'<span class="url" title="'+esc(f.pageUrl)+'">🔗 '+esc(f.pageUrl)+'</span>':'';
-      return '<div class="card"><div class="row"><div class="avatar">'+esc((f.message[0]||'?').toUpperCase())+'</div>'+
-        '<div class="body"><div class="msg">'+esc(f.message)+'</div>'+
-        '<div class="meta"><span>🕒 '+timeAgo(f.createdAt)+'</span><span>'+new Date(f.createdAt).toLocaleString()+'</span>'+url+'</div>'+
-        '</div></div></div>';
+    document.getElementById('s-mood').textContent=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):'—';
+    document.getElementById('s-votes').textContent=items.length?Math.max.apply(null,items.map(f=>f.votes||0)):0;
+    render();
+  }
+
+  function render(){
+    var items=CACHE.filter(f=>FILTER==='all'||f.type===FILTER)
+      .filter(f=>!SEARCH||f.message.toLowerCase().includes(SEARCH));
+    var list=document.getElementById('list');
+    if(!items.length){list.innerHTML='<div class="empty"><div class="big">📭</div>No feedback here yet.<br>Open the <a href="/demo" style="color:#a5b4fc">demo page</a> and send one!</div>';return;}
+    list.innerHTML=items.map(function(f){
+      var mood=f.mood?'<span class="chip mood">'+MOODEMO[f.mood]+'</span>':'';
+      var url=f.pageUrl?'<span class="url" title="'+esc(f.pageUrl)+'">🔗 '+esc(f.pageUrl)+'</span>':'';
+      var email=f.email?'<span>✉️ '+esc(f.email)+'</span>':'';
+      return '<div class="card">'+
+        '<div class="vote" onclick="vote(\''+f.id+'\')"><span class="up">▲</span><span class="n">'+(f.votes||0)+'</span></div>'+
+        '<div class="body">'+
+          '<div class="chips"><span class="chip '+f.type+'">'+f.type+'</span>'+mood+'</div>'+
+          '<div class="msg">'+esc(f.message)+'</div>'+
+          '<div class="meta"><span>🕒 '+timeAgo(f.createdAt)+'</span>'+email+url+
+            '<select class="status" onchange="setStatus(\''+f.id+'\',this.value)">'+
+              opt('new',f.status)+opt('planned',f.status)+opt('done',f.status)+
+            '</select>'+
+            '<button class="del" onclick="del(\''+f.id+'\')">🗑 delete</button>'+
+          '</div>'+
+        '</div></div>';
     }).join('');
   }
+  function opt(v,cur){return '<option value="'+v+'"'+(v===cur?' selected':'')+'>'+v+'</option>';}
+
+  async function vote(id){await fetch('/api/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,action:'vote'})});load();}
+  async function setStatus(id,status){await fetch('/api/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,action:'status',status:status})});load();}
+  async function del(id){if(!confirm('Delete this feedback?'))return;await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})});load();}
+  function exportCsv(){window.location='/api/export?project='+encodeURIComponent(proj());}
+
+  document.getElementById('search').oninput=function(e){SEARCH=e.target.value.toLowerCase();render();};
+  document.getElementById('filter').onclick=function(e){var b=e.target.closest('button');if(!b)return;document.querySelectorAll('#filter button').forEach(x=>x.classList.remove('on'));b.classList.add('on');FILTER=b.getAttribute('data-f');render();};
+  document.getElementById('project').onchange=load;
+
   load();
-  setInterval(load,4000);
+  setInterval(load,5000);
 </script>
 </body>
 </html>
